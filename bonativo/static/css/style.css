@@ -1,0 +1,93 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+
+      no-repeat center center/cover;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.file-upload__input {
+  display: none;
+}
+
+h1 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: lighter;
+  font-size: 100px;
+  text-align: center
+}
+
+h2 {
+  font-family: 'Raleway', sans-serif;
+  font-weight: lighter;
+  font-size: 35px;
+  line-height: 70px;
+  text-align: center
+}
+
+.file-upload__label {
+  max-width: 250px;
+  font-size: 0.95em;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: "Quicksand", sans-serif;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+
+input {
+  font-size: 1.5rem;
+  padding: 1rem 3rem;
+  color: #f4f4f4;
+  text-transform: uppercase;
+}
+
+.btn-link {
+  text-decoration: none;
+  border: 1px solid rgb(146, 148, 248);
+  position: relative;
+  overflow: hidden;
+    background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(146, 148, 248, 0.4),
+    transparent
+  );
+}
+
+.btn-link:hover {
+  box-shadow: 1px 1px 25px 10px rgba(146, 148, 248, 0.4);
+}
+
+.btn-link:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: all 650ms;
+}
+
+.btn-link:hover:before {
+  left: 100%;
+}
+
+.outputContainer {
+  width: 40%;
+  height: 250px;
+  border-style: solid;
+  border-width: medium;
+  margin: auto;
+}
