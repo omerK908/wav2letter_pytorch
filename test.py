@@ -83,6 +83,40 @@ def test():
     print('CER:%f, WER:%f' % (cer.mean(), wer.mean()))
 
 
+def testForWeb(csvPath):
+    set_random_seeds()
+    print('starting as %s' % time.asctime())
+    print()
+    device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
+    model = Wav2Letter.load_model(model_path)
+    model.to(device)
+    model.eval()
+    dataset = SpectrogramDataset(csvPath, model.audio_conf, model.labels)
+    decoder = get_decoder(decoderVar, lmPath, model.labels,
+                          get_beam_search_params(beamSearch))
+    with torch.no_grad():
+        num_samples = len(dataset)
+        index_to_print = random.randrange(num_samples)
+        print("index_to_print: ", index_to_print)
+        cer = np.zeros(num_samples)
+        wer = np.zeros(num_samples)
+        for idx, (data) in enumerate(dataset):
+            inputs, targets, file_paths, text = data
+            out = model(torch.FloatTensor(inputs).unsqueeze(0).to(device))
+            out_sizes = torch.IntTensor([out.size(1)])
+            predicted_texts = decoder.decode(probs=out, sizes=out_sizes)[0]
+            #print("pre: ", predicted_texts)
+            cer[idx] = decoder.cer_ratio(text, predicted_texts)
+            wer[idx] = decoder.wer_ratio(text, predicted_texts)
+            if (idx == index_to_print and print_samples) or print_all:
+                print(text)
+                print('Decoder result: ' + predicted_texts)
+                print('Raw acoustic: ' + ''.join(map(lambda i: model.labels[i], torch.argmax(out.squeeze(), 1))))
+    print('CER:%f, WER:%f' % (cer.mean(), wer.mean()))
+
+
+
+
 def set_random_seeds(seed=1337):
     random.seed(seed)
     torch.manual_seed(seed)
