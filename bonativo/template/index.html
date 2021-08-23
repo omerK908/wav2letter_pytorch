@@ -13,7 +13,7 @@
     <h2>Welcome</h2>
 
     {% if error %}
-    <p style="color:#f4f4f4; text-align: center">{{error}}</p>
+    <div class = "error-message" style="text-align: center">{{error}}</div>
     {% endif %}
 
 
@@ -23,13 +23,13 @@
     {% else %}
     <div class="container">
           <form action="/" enctype="multipart/form-data" method="POST">
-               <p><input class="btn-link" type="file" name="file"></p>
-                <p><input class="btn-link" type="submit" value="Upload Audio File"></p>
+               <p><input class="btn btn-white" type="file" name="file"></p>
+                <p><input class="btn btn-green" type="submit" value="Translate to text"></p>
           </form>
-    {% endif %}}
+    {% endif %}
     </div>
     <div class="outputContainer">
-      <p class="Textresult">heloo</p>
+      <p class="text-result"> Hi, i'm here</p>
     </div>
   </body>
 </html>
