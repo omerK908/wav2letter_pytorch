@@ -40,7 +40,7 @@ def web():
 
         csvName = makeCsvForWav(ROOT_DIR + '/waves/' + filename)
         print(csvName)
-        # test.testForWeb(csvName)
+        print(test.testForWeb(csvName))
     return render_template("index.html", filename=filename)
 
 
