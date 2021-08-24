@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request
 import test
+from pydub import AudioSegment as am
 
 app = Flask(__name__, template_folder='template')
 
@@ -15,6 +16,7 @@ def check_file(file):
 def web():
     error = None
     filename = None
+    predicted_text = None
     if 'POST' in request.method:
         if 'file' not in request.files:
             error = "file not selected"
@@ -34,38 +36,24 @@ def web():
             error = "Upload only mp3 or wav files"
             return render_template("index.html", error=error)
         ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-        print(ROOT_DIR)
+        # print(ROOT_DIR)
         file.save(os.path.join(ROOT_DIR + "/waves", filename))
-        # TODO run the test on the file
 
-        csvName = makeCsvForWav(ROOT_DIR + '/waves/' + filename)
-        print(csvName)
-        print(test.testForWeb(csvName))
-    return render_template("index.html", filename=filename)
+        sound = am.from_file(ROOT_DIR + "/waves/" + filename, format='wav')  # change sample rate
+        sound = sound.set_frame_rate(8000)
+        sound.export(ROOT_DIR + "/waves/" + filename, format='wav')
+
+        csvName = makeCsvForWav(ROOT_DIR + '/waves/' + filename)  # make csv file for the test
+        predicted_text = test.testForWeb(csvName)
+        print(predicted_text)
+    return render_template("index.html", filename=filename, predict=predicted_text)
 
 
 def makeCsvForWav(wavPath):
-    import csv
     csvName = 'test_csv.csv'
-
-    # open the file in the write mode
-    # f = open('csvFile/' + csvName, 'w')
-    #
-    # # create the csv writer
-    # writer = csv.writer(f)
-    #
-    # # write a row to the csv file
-    # writer.writerow(wavPath)
-    # f.close()
-
     file1 = open('csvFile/' + csvName, "w")
-
-    # \n is placed to indicate EOL (End of Line)
-    file1.write(wavPath)
-    file1.close()  # to change file access modes
-
-
-
+    file1.write(wavPath + ',a')
+    file1.close()
     return csvName
 
 if __name__ == "__main__":
