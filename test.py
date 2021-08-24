@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 import librosa
 import torch
 import numpy as np
@@ -9,7 +11,7 @@ from data.data_loader import SpectrogramDataset
 from decoder import GreedyDecoder, PrefixBeamSearchLMDecoder
 
 test_dataset = 'mycsvfile.csv'
-model_path = 'models/wav2letter/epoch_3.pth'
+model_path = 'models/wav2letter/epoch_9.pth'
 beamSearch = '5,0.3,5,1e-3'
 decoderVar = 'greedy'
 lmPath = ''
@@ -53,8 +55,6 @@ def get_decoder(decoder_type, lm_path, labels, beam_search_params):
 def test():
     set_random_seeds()
     print('starting as %s' % time.asctime())
-    # kwargs['cuda']=
-    print()
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
     model = Wav2Letter.load_model(model_path)
     model.to(device)
@@ -65,7 +65,6 @@ def test():
     with torch.no_grad():
         num_samples = len(dataset)
         index_to_print = random.randrange(num_samples)
-        print("index_to_print: ", index_to_print)
         cer = np.zeros(num_samples)
         wer = np.zeros(num_samples)
         for idx, (data) in enumerate(dataset):
@@ -73,7 +72,6 @@ def test():
             out = model(torch.FloatTensor(inputs).unsqueeze(0).to(device))
             out_sizes = torch.IntTensor([out.size(1)])
             predicted_texts = decoder.decode(probs=out, sizes=out_sizes)[0]
-            #print("pre: ", predicted_texts)
             cer[idx] = decoder.cer_ratio(text, predicted_texts)
             wer[idx] = decoder.wer_ratio(text, predicted_texts)
             if (idx == index_to_print and print_samples) or print_all:
@@ -83,7 +81,9 @@ def test():
     print('CER:%f, WER:%f' % (cer.mean(), wer.mean()))
 
 
-def testForWeb(csvPath):
+def testForWeb(csvName):
+    model_path = os.path.dirname(os.path.abspath(__file__)) + '/models/wav2letter/epoch_9.pth'
+    csvfile = os.path.dirname(os.path.abspath(__file__)) + '/bonativo/' + 'csvFile/' + csvName
     set_random_seeds()
     print('starting as %s' % time.asctime())
     print()
@@ -91,30 +91,24 @@ def testForWeb(csvPath):
     model = Wav2Letter.load_model(model_path)
     model.to(device)
     model.eval()
-    dataset = SpectrogramDataset(csvPath, model.audio_conf, model.labels)
+    dataset = SpectrogramDataset(csvfile, model.audio_conf, model.labels)
     decoder = get_decoder(decoderVar, lmPath, model.labels,
                           get_beam_search_params(beamSearch))
     with torch.no_grad():
         num_samples = len(dataset)
         index_to_print = random.randrange(num_samples)
-        print("index_to_print: ", index_to_print)
         cer = np.zeros(num_samples)
         wer = np.zeros(num_samples)
+        predicted_texts = ""
         for idx, (data) in enumerate(dataset):
             inputs, targets, file_paths, text = data
             out = model(torch.FloatTensor(inputs).unsqueeze(0).to(device))
             out_sizes = torch.IntTensor([out.size(1)])
             predicted_texts = decoder.decode(probs=out, sizes=out_sizes)[0]
-            #print("pre: ", predicted_texts)
-            cer[idx] = decoder.cer_ratio(text, predicted_texts)
-            wer[idx] = decoder.wer_ratio(text, predicted_texts)
-            if (idx == index_to_print and print_samples) or print_all:
-                print(text)
-                print('Decoder result: ' + predicted_texts)
-                print('Raw acoustic: ' + ''.join(map(lambda i: model.labels[i], torch.argmax(out.squeeze(), 1))))
-    print('CER:%f, WER:%f' % (cer.mean(), wer.mean()))
+            # cer[idx] = decoder.cer_ratio(text, predicted_texts)
+            # wer[idx] = decoder.wer_ratio(text, predicted_texts)
 
-
+        return predicted_texts
 
 
 def set_random_seeds(seed=1337):
