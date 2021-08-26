@@ -17,20 +17,37 @@
     {% endif %}
 
 
-    {% if filename %}
-    <p style="color:#f4f4f4; text-align: center; font-size:18px">Your file: {{filename}} has been uploaded.</p>
-    {% endif %}
+<!--    {% if filename %}-->
+<!--    <p style="color:#f4f4f4; text-align: center; font-size:18px">Your file: {{filename}} has been uploaded.</p>-->
+<!--    {% endif %}-->
     <div class="container">
           <form action="/" enctype="multipart/form-data" method="POST">
-               <p><input class="btn btn-white" type="file" name="file"></p>
-                <p><input class="btn btn-green" type="submit" value="Translate to text"></p>
+            <p> Select audio <input class="btn btn-white" type="file" name="AudioFile"></p>
+            <p> Select transcript <input class="btn btn-white" type="file" name="TextFile"></p>
+            <p><input class="btn btn-green" type="submit" value="Submit"></p>
           </form>
     </div>
 
+
+  <div class="outputs">
+    {% if text %}
+    <div>
+      <h4>Actual Text:</h4>
     <div class="outputContainer">
-      {% if predict %}
-      <p class="text-result"> {{predict}} </p>
-      {% endif %}
+      <p class="text-result"> {{text}} </p>
     </div>
+    </div>
+    {% endif %}
+
+    <div>
+      <h4>Predicted Text:</h4>
+      <div class="outputContainer">
+        {% if predict %}
+        <p class="text-result"> {{predict}} </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
   </body>
 </html>
