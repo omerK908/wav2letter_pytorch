@@ -17,14 +17,18 @@ def web():
     error = None
     filename = None
     predicted_text = None
+    textFile = None
     if 'POST' in request.method:
-        if 'file' not in request.files:
+        if 'AudioFile' not in request.files:
             error = "file not selected"
             return render_template("index.html", error=error)
 
-        file = request.files['file']
-        filename = file.filename
+        if 'TextFile' in request.files:
+            file = request.files['TextFile']
+            textFile = file.stream.read().decode("utf-8")
 
+        file = request.files['AudioFile']
+        filename = file.filename
         if ".mp3" in filename:
             filename = filename.split(".")[0]
             filename += ".wav"
@@ -46,13 +50,16 @@ def web():
         csvName = makeCsvForWav(ROOT_DIR + '/waves/' + filename)  # make csv file for the test
         predicted_text = test.testForWeb(csvName)
         print(predicted_text)
-    return render_template("index.html", filename=filename, predict=predicted_text)
+    if textFile:
+        return render_template("index.html", filename=filename, predict=predicted_text, text=textFile)
+    else:
+        return render_template("index.html", filename=filename, predict=predicted_text)
 
 
 def makeCsvForWav(wavPath):
     csvName = 'test_csv.csv'
     file1 = open('csvFile/' + csvName, "w")
-    file1.write(wavPath + ',a')
+    file1.write(wavPath + ', ')
     file1.close()
     return csvName
 
