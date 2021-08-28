@@ -22,8 +22,11 @@
 <!--    {% endif %}-->
     <div class="container">
           <form action="/" enctype="multipart/form-data" method="POST">
-            <p> Select audio <input class="btn btn-white" type="file" name="AudioFile"></p>
-            <p> Select transcript <input class="btn btn-white" type="file" name="TextFile"></p>
+            <label for="audioFile">Select audio file</label>
+            <input id="audioFile" class="btn btn-white" type="file" name="AudioFile">
+            <label for="audioFile"><img class="audio-icon" src="../static/icons/audio-waves.png"></label>
+
+            <p> Select transcript  <input class="btn btn-white" type="file" name="TextFile"></p>
             <p><input class="btn btn-green" type="submit" value="Submit"></p>
           </form>
     </div>
