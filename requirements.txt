@@ -2,7 +2,7 @@ numpy
 pandas
 librosa
 tqdm
-pytorch
+torch
 six
 scipy
 glob2
