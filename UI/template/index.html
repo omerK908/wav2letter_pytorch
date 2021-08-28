@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link href= "{{ url_for('static',filename='css/style.css') }}" rel="stylesheet" type="text/css">
+    <title>Speech2Text</title>
+  </head>
+  <body>
+  <h1>Speech2Text</h1>
+
+    <h2>Welcome</h2>
+
+    {% if error %}
+    <div class = "error-message" style="text-align: center">{{error}}</div>
+    {% endif %}
+
+
+<!--    {% if filename %}-->
+<!--    <p style="color:#f4f4f4; text-align: center; font-size:18px">Your file: {{filename}} has been uploaded.</p>-->
+<!--    {% endif %}-->
+    <div class="container">
+          <form action="/" enctype="multipart/form-data" method="POST">
+            <label class="text" for="audioFile">Select audio file</label>
+            <input id="audioFile" class="btn btn-white" type="file" name="AudioFile">
+            <label for="audioFile"><img class="icon" src="../static/icons/audio-waves.png"></label>
+
+            <p class="text"> Select transcript  <input id="textFile" class="btn btn-white" type="file" name="TextFile"><img for="textFile" class="icon" src="../static/icons/text.png"></p>
+
+            <p><input class="btn btn-green" type="submit" value="Submit"></p>
+
+          </form>
+    </div>
+
+
+  <div class="outputs">
+    {% if text %}
+    <div>
+      <h4 class="text">Actual Text:</h4>
+    <div class="outputContainer">
+      <p class="text-result"> {{text}} </p>
+    </div>
+    </div>
+    {% endif %}
+
+    <div>
+      <h4 class="text">Predicted Text:</h4>
+      <div class="outputContainer">
+        {% if predict %}
+        <p class="text-result"> {{predict}} </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  </body>
+</html>
