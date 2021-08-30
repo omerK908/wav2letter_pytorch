@@ -82,8 +82,8 @@ def test():
 
 
 def testForWeb(csvName):
-    model_path = os.path.dirname(os.path.abspath(__file__)) + '/models/wav2letter/epoch_9.pth'
-    csvfile = os.path.dirname(os.path.abspath(__file__)) + '/bonativo/' + 'csvFile/' + csvName
+    model_path = os.path.dirname(os.path.abspath(__file__)) + '/models/wav2letter/epoch_15.pth'
+    csvfile = os.path.dirname(os.path.abspath(__file__)) + '/UI/' + 'csvFile/' + csvName
     set_random_seeds()
     print('starting as %s' % time.asctime())
     print()
