@@ -28,7 +28,7 @@ validation_manifest = 'train-clean-100.csv'
 
 epochs = 15
 continue_from = True
-continue_from_path = 'models/wav2letter/epoch_3.pth'
+continue_from_path = 'models/wav2letter/epoch_15.pth'
 
 parser = argparse.ArgumentParser(description='Wav2Letter training')
 parser.add_argument('--train-manifest', help='path to train manifest csv', default=train_manifest)
