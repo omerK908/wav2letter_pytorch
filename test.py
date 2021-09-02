@@ -11,7 +11,7 @@ from data.data_loader import SpectrogramDataset
 from decoder import GreedyDecoder, PrefixBeamSearchLMDecoder
 
 test_dataset = 'mycsvfile.csv'
-model_path = 'models/wav2letter/epoch_9.pth'
+model_path = 'models/wav2letter/epoch_15.pth'
 beamSearch = '5,0.3,5,1e-3'
 decoderVar = 'greedy'
 lmPath = ''
